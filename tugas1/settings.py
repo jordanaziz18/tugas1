@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-4ae5m6fpttzu_$(=k&irn4ka87xbzw*erb@$9107=x!za!d5)+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "muhammad-jorda31-tokocamera.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "muhammad-jorda31-tokocamera.pbp.cs.ui.ac.id", "https://muhammad-jordan31-tokocamera.pbp.cs.ui.ac.id/", "http://muhammad-jordan31-tokocamera.pbp.cs.ui.ac.id/"]
 
 
 # Application definition
