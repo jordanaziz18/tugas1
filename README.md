@@ -74,7 +74,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UnlimitedBacon</title>
+    <title>tokocamera</title>
     </head>
     <body>
         <h1>
@@ -172,3 +172,270 @@ Django is frequently selected as an entry point for learning software developmen
 
 ### 4. ORM
 The Django model is called an **ORM** (Object-Relational Mapping) because it allows developers to interact with a database using Python classes instead of raw SQL. It maps Python objects to database tables, automatically handling the translation between the two.
+
+
+## Assignment 3
+
+### 1. Data Delivery Purpose
+Data delivery is crucial in implementing a platform for several reasons:
+
+Real-Time Access: Efficient data delivery ensures that users have real-time access to the information they need, enhancing user experience and engagement.
+
+Data Integrity: Reliable data delivery mechanisms maintain the integrity of the data being transferred, ensuring that users receive accurate and consistent information.
+
+
+
+### 2. XML v JSON
+XML is more suitable for complex documents with rich structures and metadata, while JSON is preferred for lightweight data interchange, especially in web applications. The choice between the two often depends on the specific requirements of the application and the data being handled.
+
+### 3. Usage of ```is_valid()```
+Importance of is_valid()
+Data Integrity: Ensures that only valid data is processed and stored, maintaining the integrity of the application.
+User Experience: Provides immediate feedback to users about what went wrong with their input, enhancing the overall user experience.
+
+
+### 4. Purpose of the ```csfr_token```
+The csrf_token is crucial for protecting against Cross-Site Request Forgery (CSRF) attacks in web applications, including those built with Django. Here’s why it's necessary and the potential consequences of not using it:
+ Protection Against CSRF Attacks: CSRF is an attack that tricks a user into submitting a request to a web application in which they are authenticated, without their consent.
+ 
+Consequences of Not Using csrf_token
+Vulnerability: Without the CSRF token, a malicious site could forge requests on behalf of an authenticated user, leading to unauthorized actions such as changing user settings, making purchases, or even deleting accounts.
+Data Integrity Risks: Sensitive operations could be executed without the user's knowledge, compromising data integrity and security.
+
+### 5. Steps:
+1. Creating Base HTML template by:
+   - Creating ```templates``` directory in the ```Root``` directory
+   - Create ```base.html``` file with the contents:
+
+   ```html
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {% block meta %} {% endblock meta %}
+    </head>
+
+    <body>
+        {% block content %} {% endblock content %}
+    </body>
+    </html>
+    ```
+
+2. Make ```base.html``` as a template file by:
+    - Opening ```settings.py``` and adjust the code:
+    
+    ```python
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [BASE_DIR / 'templates'], # FILLING THE LIST WITH THIS CONTENT
+            ...
+        }
+    ```
+
+3. Changing IDs of models using UUID by:
+    - Importing the ```uuid``` library
+
+    ```python
+    import uuid 
+    from django.db import models
+    ```
+    - Adding the ```id``` model in ```models.py```:
+
+    ```python
+    # Create your models here.
+    class tokocamera(models.Model):
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) 
+        name = models.CharField(max_length=100)
+        price = models.IntegerField()
+        description = models.TextField()
+        stock = models.IntegerField()    
+    ```
+    - Then migrate any changes in ```models.py``` as usual
+
+4. Create ```forms.py``` in the ```main``` directory, and fill it in with the following contents:
+
+    ```python
+    from main.models import tokocamera
+    from django import forms
+
+    class tokocameraForm(forms.ModelForm):
+        class Meta:
+            model = tokocamera
+            fields = '__all__'
+    ```
+5. Update the ```views.py``` file by:
+    - Importing ```redirect``` from ```django.shortcuts```:
+
+    ```python
+    from django.shortcuts import render, redirect
+    ```
+    - Adding the ```create_camera_entry``` function:
+
+    ```python
+    def create_camera_entry(request):
+        form = tokocameraForm()
+
+        if request.method == 'POST':
+            form = tokocameraForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('main:show_main')
+            
+        context = {'form': form}
+        return render(request, 'create_camera_entry.html', context)
+    ```
+    - Updating the ```show_main``` function:
+
+    ```python
+    def show_main(request):
+        product_entries = tokocamera.objects.all() # ADDED product_entries VARIABLE
+
+        context = {
+            'app_name' : 'Unlimited camera',
+            'name': 'Muhammad Ghaza Fadhlilbaqi',
+            'class': 'PBP KKI',
+            'product_entries': product_entries, # ADDED product_entries VARIABLE... again...
+        }
+
+        return render(request, "main.html", context)
+    ```
+
+6. Updating ```urls.py``` in the ```main``` directory by:
+    - Importing the recently created ```create_camera_entry``` function
+
+    ```python
+    from main.views import show_main, create_mood_entry
+    ```
+    - Adding a new URL path to ```url_patterns``` list
+
+    ```python
+    urlpatterns = [
+        path('', show_main, name='show_main'),
+        path('create_camera_entry', create_camera_entry, name='create_camera_entry'),
+    ]
+    ```
+
+7. Creating and modifying HTML files in ```main/templates``` by:
+    - Creating a new HTML file named ```create_camera_entry.html``` with the following contents:
+
+    ```html
+    {% extends 'base.html' %} 
+    {% block content %}
+    <h1>Add New Product Entry</h1>
+
+    <form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+        <td></td>
+        <td>
+            <input type="submit" value="Add Product" />
+        </td>
+        </tr>
+    </table>
+    </form>
+
+    {% endblock %}
+    ```
+    - Modifying the ```main.html``` file into:
+
+    ```html
+    {% extends 'base.html' %}
+    {% block content %}
+    <h1>{{ app_name }}</h1>
+
+    <h5>Name:</h5>
+    <p>{{ name }}</p>
+
+    <h5>Class:</h5>
+    <p>{{ class }}</p>
+
+
+    {% if not product_entries %}
+    <p>There are no products available in the shop.</p>
+    {% else %}
+    <table>
+    <tr>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Stock</th>
+    </tr>
+
+    {% for product_entry in product_entries %}
+    <tr>
+        <td>{{product_entry.name}}</td>
+        <td>{{product_entry.price}}</td>
+        <td>{{product_entry.description}}</td>
+        <td>{{product_entry.stock }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+    {% endif %}
+
+    <br />
+
+    <a href="{% url 'main:create_camera_entry' %}">
+    <button>Add Product</button>
+    </a>
+
+    {% endblock content %}
+    ```
+
+8. Creating Functions for XML, JSON, XML by ID and JSON by ID:
+    - the XML function
+
+    ```python
+    def show_xml(request):
+        data = tokocamera.objects.all()
+        return HttpResponse(serializers.serialize('xml', data), content_type='application/xml')
+    ```
+    
+    - the JSON function
+
+    ```python
+    def show_json(request):
+        data = tokocamera.objects.all()
+        return HttpResponse(serializers.serialize('json', data), content_type='application/json')
+    ```
+
+    - the XML by ID function
+
+    ```python
+    def show_xml_by_id(request, id):
+        data = tokocamera.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize('xml', data), content_type='application/xml')
+    ```
+
+    - the JSON by ID function
+
+    ```python
+    def show_json_by_id(request, id):
+        data = tokocamera.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize('json', data), content_type='application/json')
+    ```
+
+9. Routing the 4 new functions the ```urls.py``` file in the ```main``` directory
+
+    ```python
+    urlpatterns = [
+        ...
+        path('xml/', show_xml, name='show_xml'),
+        path('json/', show_json, name='show_json'),
+        path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
+        path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
+    ]
+    ```
+
+10. Last but not least, testing the site in the localhost with
+
+    ```bash
+    python manage.py runserver
+    ```
+
+
+
