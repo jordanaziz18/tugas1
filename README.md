@@ -1,37 +1,43 @@
+
 # Toko camera
 
 
 ## Assignment 2 
 
 ### 1. Steps: 
-1. Make a new local directory named ```tugas1```
+```tugas1```
 2. Initialized as well configuring ```git``` in the repository
 3. Create a new repository in GitHub with the same name
 4. Connecting local repository with the GitHub repository by:
    - Setting a new branch named ```main``` using:
 
-    ```bash
+```
+
     git branch -M main
     ```
    - Connecting the local repository to GitHub using:
 
-    ```bash
+```sh
     git remote add origin https://github.com/jordanaziz18/tugas1
-    ```
+```
+
 5. In the local directory, set up a virtual environment by running:
 
-    ```bash
+```sh
     python -m venv env
-    ```
+```
+
    And activating it by:
 
-    ```bash
+```sh
     env\Scripts\activate
-    ```
-6. Set up requirements in the same local directory by:
-   - Creating a new directory called ```requirements.txt``` with the contents being: 
+```
 
-    ```
+6. Set up requirements in the same local directory by:
+```requirements.txt```
+
+```
+
     django
     gunicorn
     whitenoise
@@ -41,34 +47,39 @@
     ```
    - Running the command to enable the requirements
 
-   ```bash
+```sh
    pip install -r requirements.txt
-   ```
+```
+
 7. Create a new Django project by running:
-    ```bash
+```sh
     django-admin startproject tugas1 .
-    ```
-8. Add the following to ```ALLOWED_HOST``` to allow access to local host:
+```
+```ALLOWED_HOST```
     
-    ```
+```
+
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
     ```
-9. Create the ```main``` app inside the main directory by:
+```main```
     - Running the following command
 
-    ```bash
+```
+
     python manage.py startapp main
     ```
-    - And adding ```main``` to the ```INSTALLED_APPS``` in ```settings.py```
+```main```
 
-    ```
+```
+
     INSTALLED_APPS = [
     'main'
     ]
     ```
-10. Create a new directory in ```main``` named ```templates``` with a ```html``` file named ```main.html``` with the contents:
+```main```
 
-    ```html
+```
+
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -90,10 +101,11 @@
     </body>
     </html>
     ```
-11. Adding new models by modifying ```models.py``` by:
+```models.py```
     - Adding the following to the file:
 
-    ```python
+```
+
     from django.db import models
 
     class tugas1 (models.Model):
@@ -103,15 +115,17 @@
     image = models.ImageField(upload_to='images/')
     stock = models.IntegerField()
     ```
-    - Execute the two commands to migrate any changes made to the ```model.py``` file:
+```model.py```
 
-    ```bash
+```
+
     python manage.py makemigrations
     python manage.py migrate
     ```
-12. Integrating the ```views.py``` file with the ```main.html``` file:
+```views.py```
     
-    ```python
+```
+
     from django.shortcuts import render
 
     def show_main(request):
@@ -123,10 +137,11 @@
 
         return render(request, 'main.html', context)
     ```
-13. Route the ```main``` application to the ```urls.py``` file by:
+```main```
     - Adding the following to ```urls.py``` in the ```main``` directory
 
-    ```python
+```
+
     from django.urls import path
     from main.views import show_main
 
@@ -136,9 +151,10 @@
         path('', show_main, name='show_main'),
     ]
     ```
-    - Add a URL route in the ```urls.py``` file in the ```tugas1 directory by:
+```urls.py```
     
-    ```python
+```
+
     from django.contrib import admin
     from django.urls import path, include
 
@@ -150,18 +166,16 @@
 14. Test the app by:
     - Running the application by running the command:
     
-    ```bash
+```sh
     python manage.py runserver
-    ```
+```
+
     - Then open 
     
-    ```bash
+```sh
     http://localhost:8000/
-    ```
-
-
-
-### 2. Use of ```git```
+```
+```git```
 Git is an essential tool in software development for several key reasons:
 
 Version Control: Git enables developers to track changes made to the codebase and revert to previous versions if necessary.
@@ -207,7 +221,8 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
    - Creating ```templates``` directory in the ```Root``` directory
    - Create ```base.html``` file with the contents:
 
-   ```html
+```
+
     {% load static %}
     <!DOCTYPE html>
     <html lang="en">
@@ -223,10 +238,11 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
     </html>
     ```
 
-2. Make ```base.html``` as a template file by:
+```base.html```
     - Opening ```settings.py``` and adjust the code:
     
-    ```python
+```
+
     TEMPLATES = [
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -236,15 +252,17 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
     ```
 
 3. Changing IDs of models using UUID by:
-    - Importing the ```uuid``` library
+```uuid```
 
-    ```python
+```
+
     import uuid 
     from django.db import models
     ```
-    - Adding the ```id``` model in ```models.py```:
+```id```
 
-    ```python
+```
+
     # Create your models here.
     class tokocamera(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) 
@@ -253,11 +271,12 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
         description = models.TextField()
         stock = models.IntegerField()    
     ```
-    - Then migrate any changes in ```models.py``` as usual
+```models.py```
 
 4. Create ```forms.py``` in the ```main``` directory, and fill it in with the following contents:
 
-    ```python
+```
+
     from main.models import tokocamera
     from django import forms
 
@@ -266,15 +285,17 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
             model = tokocamera
             fields = '__all__'
     ```
-5. Update the ```views.py``` file by:
+```views.py```
     - Importing ```redirect``` from ```django.shortcuts```:
 
-    ```python
+```
+
     from django.shortcuts import render, redirect
     ```
-    - Adding the ```create_camera_entry``` function:
+```create_camera_entry```
 
-    ```python
+```
+
     def create_camera_entry(request):
         form = tokocameraForm()
 
@@ -287,9 +308,10 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
         context = {'form': form}
         return render(request, 'create_camera_entry.html', context)
     ```
-    - Updating the ```show_main``` function:
+```show_main```
 
-    ```python
+```
+
     def show_main(request):
         product_entries = tokocamera.objects.all() # ADDED product_entries VARIABLE
 
@@ -303,25 +325,28 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
         return render(request, "main.html", context)
     ```
 
-6. Updating ```urls.py``` in the ```main``` directory by:
+```urls.py```
     - Importing the recently created ```create_camera_entry``` function
 
-    ```python
+```
+
     from main.views import show_main, create_mood_entry
     ```
-    - Adding a new URL path to ```url_patterns``` list
+```url_patterns```
 
-    ```python
+```
+
     urlpatterns = [
         path('', show_main, name='show_main'),
         path('create_camera_entry', create_camera_entry, name='create_camera_entry'),
     ]
     ```
 
-7. Creating and modifying HTML files in ```main/templates``` by:
+```main/templates```
     - Creating a new HTML file named ```create_camera_entry.html``` with the following contents:
 
-    ```html
+```
+
     {% extends 'base.html' %} 
     {% block content %}
     <h1>Add New Product Entry</h1>
@@ -341,9 +366,10 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
 
     {% endblock %}
     ```
-    - Modifying the ```main.html``` file into:
+```main.html```
 
-    ```html
+```
+
     {% extends 'base.html' %}
     {% block content %}
     <h1>{{ app_name }}</h1>
@@ -389,39 +415,37 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
 8. Creating Functions for XML, JSON, XML by ID and JSON by ID:
     - the XML function
 
-    ```python
+```python
     def show_xml(request):
         data = tokocamera.objects.all()
         return HttpResponse(serializers.serialize('xml', data), content_type='application/xml')
-    ```
+```
+
     
     - the JSON function
 
-    ```python
+```python
     def show_json(request):
         data = tokocamera.objects.all()
         return HttpResponse(serializers.serialize('json', data), content_type='application/json')
-    ```
+```
 
     - the XML by ID function
 
-    ```python
+```python
     def show_xml_by_id(request, id):
         data = tokocamera.objects.filter(pk=id)
         return HttpResponse(serializers.serialize('xml', data), content_type='application/xml')
-    ```
+```
 
     - the JSON by ID function
 
-    ```python
+```python
     def show_json_by_id(request, id):
         data = tokocamera.objects.filter(pk=id)
         return HttpResponse(serializers.serialize('json', data), content_type='application/json')
-    ```
+```
 
-9. Routing the 4 new functions the ```urls.py``` file in the ```main``` directory
-
-    ```python
     urlpatterns = [
         ...
         path('xml/', show_xml, name='show_xml'),
@@ -431,11 +455,8 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
     ]
     ```
 
-10. Last but not least, testing the site in the localhost with
+9. Last but not least, testing the site in the localhost with
 
-    ```bash
+```sh
     python manage.py runserver
-    ```
-
-
-
+```
