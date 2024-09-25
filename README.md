@@ -460,3 +460,62 @@ Data Integrity Risks: Sensitive operations could be executed without the user's 
 ```sh
     python manage.py runserver
 ```
+
+## Assignment 4
+
+### 1. What is the difference between HttpResponseRedirect() and redirect()
+
+#### HttpResponseRedirect(): 
+1. It is a class-based response.
+2. You need to provide the full URL as an argument.
+```sh
+from django.http import HttpResponseRedirect
+response = HttpResponseRedirect(reverse("main:show_main"))
+```
+
+### redirect()
+- It is a shortcut function provided by Django.
+- It can take a URL, a view name, or a view name with arguments.
+- It is more flexible and easier to use.
+
+```sh
+from django.shortcuts import redirect
+
+  if form.is_valid() and request.method == "POST":
+            camera_entry = form.save(commit=False)
+            camera_entry.user = request.user
+            camera_entry.save()
+            return redirect('main:show_main')
+```
+
+## 2. MoodEntry link with User
+
+The MoodEntry model can be linked to the built-in User model using a foreign key. This relationship allows each mood entry to be associated with a specific user, enabling personalized data management.
+
+## 3. Authentication vs Authorization
+
+### Authentication:
+- Definition: The process of verifying the identity of a user or system.
+- Purpose: Ensures that the entity is who it claims to be.
+### Authorization:
+- Definition: The process of determining what an authenticated user or system is allowed to do.
+- Purpose: Controls access to resources and actions based on permissions.
+
+- summary:
+In summary, authentication verifies identity, while authorization grants access based on that identity.
+
+## 4. Use of Cookies
+
+### How Django Remembers Logged-In Users
+- Django uses cookies to remember logged-in users. When a user logs in, Django creates a session and stores the session ID in a cookie on the user's browser. This session ID is then used to identify the user in subsequent requests.
+
+### Are All Cookies Safe to Use?
+Not all cookies are inherently safe. Here are some considerations:
+- Secure Cookies: Should be used to store sensitive information and should only be transmitted over HTTPS.
+- HttpOnly Cookies: Cannot be accessed via JavaScript, reducing the risk of XSS attacks.
+
+## Summary
+- Django uses cookies to manage user sessions and remember logged-in users. While cookies have various uses, their safety depends on how they are implemented and secured. Proper use of secure, HttpOnly, and SameSite attributes can enhance cookie security.
+
+
+## 5. Steps
