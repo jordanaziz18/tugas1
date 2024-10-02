@@ -3,6 +3,8 @@ from main.views import show_main, create_camera_entry, show_xml, show_json, show
 from main.views import register
 from main.views import login_user
 from main.views import logout_user
+from main.views import edit_camera
+from main.views import delete_camera
 
 
 
@@ -19,4 +21,7 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('login/', login_user, name='login'),
     path('logout/', logout_user, name='logout'),
+    path('edit-camera/<uuid:id>', edit_camera, name='edit_camera'),
+    path('create-camera-entry/', create_camera_entry, name='create_camera_entry'),
+    path('delete-camera/<uuid:id>', delete_camera, name='delete_camera'),
 ]

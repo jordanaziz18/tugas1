@@ -700,8 +700,10 @@ def show_main(request):
 
 ## 5. Connecting Tokocamera and User by:
 
-- Importing User to ```models.py:
-```python
+```models.py:
+
+```
+
 from django.contrib.auth.models import User
 ```
 
@@ -797,3 +799,91 @@ return response
 ```sh
     python manage.py runserver
 ```
+
+## Assignment 5
+
+##### 1. If there are multiple CSS selectors for an HTML element, explain the priority order of these CSS selectors!
+
+
+Inline styles (e.g., style="...") have the highest priority.
+IDs (e.g., #id) have higher priority than classes, attributes, and pseudo-classes.
+Classes, attributes, and pseudo-classes (e.g., .class, [attribute], :hover) have higher priority than elements and pseudo-elements.
+Elements and pseudo-elements (e.g., div, :before) have the lowest priority.
+
+#### 2. Why does responsive design become an important concept in web application development? Give examples of applications that have and have not implemented responsive design!
+
+
+Importance of Responsive Design:
+Improved User Experience: Users can easily navigate and interact with the site regardless of the device they are using.
+
+Example of applicaiton:
+Airbnb: The site adapts to different screen sizes, ensuring a smooth booking experience on any device
+
+#### 3. Explain the differences between margin, border, and padding, and how to implement these three things!
+
+
+### 1.Margin:
+
+- Definition: The space outside the border of an element.
+- Purpose: Creates space between the element and other elements around it.
+- Implementation: margin property in CSS
+
+### 2.Border:
+
+- Definition: The line that surrounds the padding and content of an element.
+- Purpose: Defines the boundary of an element and can be styled with different colors, widths, and styles.
+- Implementation: border property in CSS.
+
+### 3.Padding:
+
+- Definition: The space between the content of an element and its border.
+- Purpose: Creates space inside the element, around the content.
+- Implementation: padding property in CSS.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Margin, Border, and Padding Example</title>
+  <style>
+    .example {
+      margin: 20px; /* Space outside the border */
+      border: 2px solid black; /* Border around the element */
+      padding: 10px; /* Space inside the border */
+      background-color: lightblue; /* Background color for visibility */
+    }
+  </style>
+</head>
+<body>
+  <div class="example">
+    This is an example element.
+  </div>
+</body>
+</html>
+```
+
+### 4. Explain the concepts of flex box and grid layout along with their uses!
+
+
+### Flexbox
+Concept:
+
+- Flexbox, or the Flexible Box Layout, is a CSS layout model designed to provide a more efficient way to lay out, align, and distribute space among items in a container, even when their size is unknown or dynamic.
+Uses:
+
+- One-dimensional layout: Flexbox is ideal for laying out items in a single direction (either as a row or a column).
+Alignment: Easily align items along the main axis (horizontal or vertical) and the cross axis.
+Space distribution: Distribute space between items or around items.
+Responsive design: Adjust the layout of items based on the available space.
+
+### Grid Layout
+Concept:
+
+- The CSS Grid Layout is a two-dimensional layout system for the web. It allows developers to create complex layouts on the web more easily and consistently across browsers.
+Uses:
+
+- Two-dimensional layout: Grid is ideal for creating layouts that require both rows and columns.
+Explicit placement: Precisely place items into a grid defined by rows and columns.
+Complex layouts: Create complex and responsive layouts with ease.
+Example:

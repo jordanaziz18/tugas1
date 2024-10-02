@@ -4,4 +4,4 @@ from django import forms
 class tokocameraform(forms.ModelForm):
     class Meta:
         model = tokocamera
-        fields = '__all__'
+        fields = ['name', 'price', 'description', 'stock']

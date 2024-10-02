@@ -25,7 +25,7 @@ def show_main(request):
         'name': 'Muhammad Jordan ',
         'class': 'PBP KKI',
         'camera_entries': camera_entries,
-        'last_login': request.COOKIES('last_login'),
+        #'last_login': request.COOKIES('last_login'),
     }
 
     return render(request, "main.html", context)
@@ -98,7 +98,28 @@ def logout_user(request):
     response.delete_cookie('last_login')
     return response
 
+def edit_camera(request, id):
+    # Get mood entry based on id
+    camera = tokocamera.objects.get(pk = id)
 
+    # Set mood entry as an instance of the form
+    form = tokocameraform(request.POST or None, instance=camera)
+
+    if form.is_valid() and request.method == "POST":
+        # Save form and return to home page
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_camera.html", context)
+
+def delete_camera(request, id):
+    # Get mood based on id
+    mood = tokocamera.objects.get(pk = id)
+    # Delete mood
+    mood.delete()
+    # Return to home page
+    return HttpResponseRedirect(reverse('main:show_main'))
 
 
 
