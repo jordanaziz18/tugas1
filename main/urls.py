@@ -23,7 +23,6 @@ urlpatterns = [
     path('login/', login_user, name='login'),
     path('logout/', logout_user, name='logout'),
     path('edit-camera/<uuid:id>/', edit_camera, name='edit_camera'),
-    path('create-camera-entry/', create_camera_entry, name='create_camera_entry'),
     path('delete-camera/<uuid:id>/', delete_camera, name='delete_camera'),
     path('create-camera-ajax/', create_tokocamera_form_ajax, name='create_camera_ajax'),
 ]

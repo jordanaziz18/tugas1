@@ -46,7 +46,7 @@
 
       <!-- Modal Body -->
       <div class="px-6 py-4 space-y-6">
-        <form id="cameraEntryForm">
+        <form id="cameraEntryForm" method="POST">
           {% csrf_token %}
           <div class="mb-4">
             <label for="name" class="block text-sm font-medium text-gray-700">Camera Name</label>
@@ -77,11 +77,8 @@
 
       <!-- Modal Footer -->
       <div class="flex justify-end p-4 border-t">
-        <button type="button" 
-                class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" 
-                onclick="hideModal();">Cancel</button>
-        <button type="submit" form="cameraEntryForm" 
-                class="ml-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg">Save</button>
+        <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" onclick="hideModal();">Cancel</button>
+        <button type="button" class="ml-2 bg-indigo-700 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg" onclick="submitCameraForm();">Save</button>
       </div>
     </div>
   </div>
@@ -90,10 +87,10 @@
   <div id="camera_entry_cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for camera_entry in camera_entries %}
     <div class="bg-indigo-100 shadow-md rounded-lg p-4 relative">
-      <h3 class="font-bold text-xl">{{ camera_entry.name }}</h3>
-      <p class="text-gray-600">Price: Rp{{ camera_entry.price }}</p>
-      <p class="text-gray-700">Stock: {{ camera_entry.stock }}</p>
-      <p class="text-gray-700">Description: {{ camera_entry.description }}</p>
+      <h3 class="font-bold text-xl">{{ camera.name }}</h3>
+      <p class="text-gray-600">Price: Rp{{ camera.price }}</p>
+      <p class="text-gray-700">Stock: {{ camera.stock }}</p>
+      <p class="text-gray-700">Description: {{ camera.description }}</p>
       <div class="absolute top-2 right-2 flex space-x-2">
         <a href="{% url 'main:edit_camera' camera_entry.pk %}" 
            class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2">
@@ -129,6 +126,28 @@
     modalContent.classList.add('scale-95', 'opacity-0');
     setTimeout(() => modal.classList.add('hidden'), 300);
   }
+
+  function submitCameraForm() {
+    const form = document.getElementById('cameraEntryForm');
+    const formData = new FormData(form);
+
+    fetch("{% url 'main:create_camera_ajax' %}", {
+        method: "POST",
+        body: formData,
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Camera entry added successfully!");
+            hideModal();  // Hide the modal after successful submission
+            location.reload();  // Reload the page to reflect the new entry
+        } else {
+            alert("Error adding camera entry.");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+  }
 </script>
 
-{% endblock content %}
+{% endblock %}
