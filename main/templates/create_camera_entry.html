@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block meta %}
 <title>Create Camera</title>
 {% endblock meta %}
@@ -7,31 +8,37 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-<div class="flex flex-col min-h-screen bg-gray-100">
-  <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
-    <h1 class="text-3xl font-bold text-center mb-8 text-black">Add Camera</h1>
-  
-    <div class="bg-white shadow-md rounded-lg p-6 form-style">
-      <form method="POST" class="space-y-6">
+<div class="flex flex-col min-h-screen bg-gray-50 py-8">
+  <div class="container mx-auto px-4 max-w-xl">
+    <h1 class="text-3xl font-extrabold text-center mb-6 text-gray-900">Add New Camera</h1>
+
+    <!-- Form Container -->
+    <div class="bg-white shadow-lg rounded-lg p-6">
+      <form method="POST" enctype="multipart/form-data" class="space-y-6">
         {% csrf_token %}
+        
         {% for field in form %}
-          <div class="flex flex-col">
-            <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-gray-700">
+          <div>
+            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
               {{ field.label }}
             </label>
-            <div class="w-full">
-              {{ field }}
+            <div class="mt-1 relative">
+              {{ field|add_class:"block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" }}
             </div>
             {% if field.help_text %}
               <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
             {% endif %}
-            {% for error in field.errors %}
-              <p class="mt-1 text-sm text-red-600">{{ error }}</p>
-            {% endfor %}
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+              {% endfor %}
+            {% endif %}
           </div>
         {% endfor %}
-        <div class="flex justify-center mt-6">
-          <button type="submit" class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full">
+
+        <!-- Submit Button -->
+        <div class="flex justify-center mt-4">
+          <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 ease-in-out">
             Add Camera
           </button>
         </div>
