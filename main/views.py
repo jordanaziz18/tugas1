@@ -115,11 +115,7 @@ def delete_camera(request, id):
     camera.delete()
     return HttpResponseRedirect(reverse('main:show_main'))
 
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-from django.utils.html import strip_tags
-from .models import tokocamera
+
 
 @csrf_exempt  # Exempt CSRF protection for this view (ensure you have token in your AJAX request)
 @require_POST  # Ensure only POST requests are accepted
@@ -129,6 +125,7 @@ def create_tokocamera_form_ajax(request):
         name = strip_tags(request.POST.get("name"))
         price = strip_tags(request.POST.get("price"))
         description = strip_tags(request.POST.get("description"))
+        stock = strip_tags(request.POST.get("stock"))
         user = request.user
         
         # Validate that data is not empty (optional)
@@ -140,6 +137,7 @@ def create_tokocamera_form_ajax(request):
             name=name,
             price=price,
             description=description,
+            stock = stock,
             user=user
         )
         new_product.save()
